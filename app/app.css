@@ -5,22 +5,41 @@
 @theme {
   --font-sans: "Mona Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --color-dark-200: #475467;
-  --color-light-blue-100: #c1d3f81a;
-  --color-light-blue-200: #a7bff14d;
 
-  --color-badge-green: #d5faf1;
-  --color-badge-red: #f9e3e2;
-  --color-badge-yellow: #fceed8;
+  /* Modern Color Palette */
+  --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  --color-primary-light: #a5b4fc;
+  --color-secondary: #06b6d4;
+  --color-accent: #f59e0b;
 
-  --color-badge-green-text: #254d4a;
-  --color-badge-red-text: #752522;
-  --color-badge-yellow-text: #73321b;
+  --color-dark-200: #374151;
+  --color-dark-300: #1f2937;
+  --color-light-100: #f8fafc;
+  --color-light-200: #e2e8f0;
+  --color-light-blue-100: #dbeafe1a;
+  --color-light-blue-200: #bfdbfe4d;
+
+  --color-badge-green: #d1fae5;
+  --color-badge-red: #fee2e2;
+  --color-badge-yellow: #fef3c7;
+  --color-badge-blue: #dbeafe;
+
+  --color-badge-green-text: #065f46;
+  --color-badge-red-text: #991b1b;
+  --color-badge-yellow-text: #92400e;
+  --color-badge-blue-text: #1e40af;
 }
 
 html,
 body {
-  @apply bg-white;
+  background: linear-gradient(
+    135deg,
+    #fef7ed 0%,
+    #fef3c7 30%,
+    #ecfdf5 70%,
+    #f0f9ff 100%
+  );
 }
 
 main {
@@ -38,11 +57,15 @@ label {
   @apply text-dark-200;
 }
 input {
-  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
+  @apply w-full p-4 rounded-2xl focus:outline-none bg-white border border-light-200
+         focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200
+         shadow-sm hover:shadow-md;
 }
 
 textarea {
-  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
+  @apply w-full p-4 rounded-2xl focus:outline-none bg-white border border-light-200
+         focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200
+         shadow-sm hover:shadow-md resize-none;
 }
 
 form {
@@ -51,13 +74,16 @@ form {
 
 @layer components {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5];
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-dark-300 to-secondary;
   }
   .gradient-border {
-    @apply bg-gradient-to-b from-light-blue-100 to-light-blue-200 p-4 rounded-2xl;
+    @apply bg-gradient-to-br from-light-blue-100 to-light-blue-200 p-4 rounded-2xl
+           border border-light-200/50 shadow-lg backdrop-blur-sm;
   }
   .primary-button {
-    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full;
+    @apply primary-gradient text-white rounded-full px-6 py-3 cursor-pointer w-full
+           font-medium transition-all duration-200 hover:shadow-lg hover:scale-[1.02]
+           active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary/50;
   }
   .resume-nav {
     @apply flex flex-row justify-between items-center p-4 border-b border-gray-200;
@@ -85,7 +111,9 @@ form {
   }
 
   .resume-card {
-    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[430px] xl:w-[490px] bg-white rounded-2xl p-4;
+    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[430px] xl:w-[490px]
+           bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-light-200/50
+           hover:shadow-xl hover:scale-[1.02] transition-all duration-300;
   }
 
   .resume-card-header {
@@ -97,7 +125,9 @@ form {
   }
 
   .navbar {
-    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto;
+    @apply flex flex-row justify-between items-center bg-white/80 backdrop-blur-md
+           rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto shadow-lg
+           border border-light-200/50;
   }
 
   .score-badge {
@@ -112,34 +142,38 @@ form {
     @apply relative p-8 text-center transition-all duration-700 cursor-pointer bg-white rounded-2xl min-h-[208px];
   }
   .uploader-selected-file {
-    @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl;
+    @apply flex items-center justify-between p-4 bg-gradient-to-r from-light-100 to-white
+           rounded-2xl border border-light-200 shadow-sm hover:shadow-md transition-all duration-200;
   }
 }
 
 @utility bg-gradient {
-  background: linear-gradient(to bottom, #f0f4ff 60%, #fa7185cc);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
 }
 
 @utility text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5];
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-dark-300 to-secondary;
 }
 
 @utility gradient-hover {
-  @apply bg-gradient-to-b from-light-blue-100 to-light-blue-200;
+  @apply bg-gradient-to-br from-light-blue-100 to-light-blue-200;
 }
 
 @utility primary-gradient {
-  background: linear-gradient(to bottom, #8e98ff, #606beb);
-  box-shadow: 0px 74px 21px 0px #6678ef00;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3),
+    0 4px 6px -2px rgba(99, 102, 241, 0.1);
 }
 
 @utility primary-gradient-hover {
-  background: linear-gradient(to bottom, #717dff, #4957eb);
+  background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #8b5cf6 100%);
+  box-shadow: 0 20px 35px -5px rgba(139, 92, 246, 0.4),
+    0 8px 15px -3px rgba(139, 92, 246, 0.2);
 }
 
 @utility inset-shadow {
-  box-shadow: inset 0 0 12px 0 rgba(36, 99, 235, 0.2);
-  backdrop-filter: blur(10px);
+  box-shadow: inset 0 2px 4px 0 rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(8px);
 }
 
 @keyframes fadeIn {
