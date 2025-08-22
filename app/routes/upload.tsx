@@ -61,28 +61,66 @@ const upload = () => {
     );
     if (!feedback) return setStatusText("Failed to get feedback");
 
-    let feedbackText: string;
-    if (typeof feedback.message.content === "string") {
-      feedbackText = feedback.message.content;
-    } else if (
-      Array.isArray(feedback.message.content) &&
-      feedback.message.content[0]?.text
+    // let feedbackText: string;
+    // if (typeof feedback.message.content === "string") {
+    //   feedbackText = feedback.message.content;
+    // } else if (
+    //   Array.isArray(feedback.message.content) &&
+    //   feedback.message.content[0]?.text
+    // ) {
+    //   feedbackText = feedback.message.content[0].text;
+    // } else {
+    //   return setStatusText("Invalid feedback format received");
+    // }
+
+    // try {
+    //   data.feedback = JSON.parse(feedbackText);
+    // } catch (error) {
+    //   return setStatusText("Failed to parse feedback data");
+    //}
+    type FeedbackMessage = {
+      content: string | { text: string } | { text: string }[];
+    };
+
+    function extractFeedback(
+      feedback: { message: FeedbackMessage },
+      setStatusText: (msg: string) => void
     ) {
-      feedbackText = feedback.message.content[0].text;
-    } else {
-      return setStatusText("Invalid feedback format received");
+      let feedbackText = "";
+
+      // Try to normalize into a string
+      if (typeof feedback.message.content === "string") {
+        feedbackText = feedback.message.content;
+      } else if (Array.isArray(feedback.message.content)) {
+        feedbackText = feedback.message.content[0]?.text ?? "";
+      } else if ("text" in feedback.message.content) {
+        feedbackText = (feedback.message.content as { text: string }).text;
+      }
+
+      if (!feedbackText) {
+        setStatusText("Invalid feedback format received");
+        return null;
+      }
+
+      // Try to parse JSON
+      try {
+        return JSON.parse(feedbackText);
+      } catch {
+        // If it's plain text, wrap it in a consistent object
+        return { message: feedbackText };
+      }
     }
 
-    try {
-      data.feedback = JSON.parse(feedbackText);
-    } catch (error) {
-      return setStatusText("Failed to parse feedback data");
+    const parsedFeedback = extractFeedback(feedback, setStatusText);
+
+    if (parsedFeedback) {
+      data.feedback = parsedFeedback;
     }
 
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
     setStatusText("Analysis complete! Redirecting...");
     console.log(data);
-    // Navigate to results page
+    navigate(`/resume/${uuid}`);
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
