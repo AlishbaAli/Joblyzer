@@ -62,8 +62,9 @@ export default function Home() {
             <Link
               to="/upload"
               className="primary-button w-fit text-xl font-semibold"
-            />
-            Upload Resume
+            >
+              Upload Resume
+            </Link>
           </div>
         )}
       </section>
